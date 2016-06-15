@@ -6,7 +6,7 @@ module Koudoku
     before_filter :load_plans, only: [:index, :edit]
 
     def load_plans
-      @plans = ::Plan.order(:price)
+      @plans = ::Plan.order(:display_order)
     end
 
     def unauthorized
@@ -75,7 +75,7 @@ module Koudoku
       end
 
       # Load all plans.
-      @plans = ::Plan.order(:display_order).all
+      # @plans = ::Plan.order(:display_order).all
       
       # Don't prep a subscription unless a user is authenticated.
       unless no_owner?
