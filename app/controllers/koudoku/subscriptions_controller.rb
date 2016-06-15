@@ -6,7 +6,7 @@ module Koudoku
     before_filter :load_plans, only: [:index, :edit]
 
     def load_plans
-      @plans = ::Plan.order(:display_order)
+      @plans = ::Plan.order(:price)
     end
 
     def unauthorized
@@ -74,6 +74,9 @@ module Koudoku
         redirect_to koudoku.edit_owner_subscription_path(current_owner, current_owner.subscription)
       end
 
+      # Load all plans.
+      @plans = ::Plan.order(:display_order).all
+      
       # Don't prep a subscription unless a user is authenticated.
       unless no_owner?
         # we should also set the owner of the subscription here.
@@ -96,7 +99,7 @@ module Koudoku
           end
           
         else
-          raise I18n.t('koudoku.failure.feature_depends_on_devise')
+          raise "This feature depends on Devise for authentication."
         end
 
       else
@@ -120,7 +123,7 @@ module Koudoku
         flash[:notice] = after_new_subscription_message
         redirect_to after_new_subscription_path 
       else
-        flash[:error] = I18n.t('koudoku.failure.problem_processing_transaction')
+        flash[:error] = 'There was a problem processing this transaction.'
         render :new
       end
     end
@@ -129,7 +132,7 @@ module Koudoku
     end
 
     def cancel
-      flash[:notice] = I18n.t('koudoku.confirmations.subscription_cancelled')
+      flash[:notice] = "You've successfully cancelled your subscription."
       @subscription.plan_id = nil
       @subscription.save
       redirect_to owner_subscription_path(@owner, @subscription)
@@ -140,10 +143,10 @@ module Koudoku
 
     def update
       if @subscription.update_attributes(subscription_params)
-        flash[:notice] = I18n.t('koudoku.confirmations.subscription_updated')
+        flash[:notice] = "You've successfully updated your subscription."
         redirect_to owner_subscription_path(@owner, @subscription)
       else
-        flash[:error] = I18n.t('koudoku.failure.problem_processing_transaction')
+        flash[:error] = 'There was a problem processing this transaction.'
         render :edit
       end
     end
@@ -169,8 +172,8 @@ module Koudoku
     def after_new_subscription_message
       controller = ::ApplicationController.new
       controller.respond_to?(:new_subscription_notice_message) ? 
-          controller.try(:new_subscription_notice_message) :
-          I18n.t('koudoku.confirmations.subscription_upgraded')
+          controller.try(:new_subscription_notice_message) : 
+          "You've been successfully upgraded."
     end
   end
 end

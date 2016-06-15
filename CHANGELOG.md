@@ -1,3 +1,11 @@
+## Version 1.3.1 (NOT released on rubygems)
+author: 0.0.12 - 1.3.0 @yas4891 etal. from repo, 1.3.1 @durfee
+
+Fixed using credit cards under new API (2016-03-07). Changed use of 'card' to 'source'. 
+
+No support for ACH yet.
+
+
 ## Version 0.0.12 (NOT released on rubygems)
 author: Christoph Engelhardt (@yas4891)
 
