@@ -73,13 +73,9 @@ module Koudoku
       if current_owner and current_owner.subscription.present?
         redirect_to koudoku.edit_owner_subscription_path(current_owner, current_owner.subscription)
       end
-
-<<<<<<< HEAD
       # Load all plans.
-      # @plans = ::Plan.order(:display_order).all
+      @plans = ::Plan.order(:display_order)
       
-=======
->>>>>>> parent of 08dcfb2... update cards to sources, closes #155
       # Don't prep a subscription unless a user is authenticated.
       unless no_owner?
         # we should also set the owner of the subscription here.
